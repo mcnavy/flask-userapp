@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -7,8 +9,9 @@ from flask_restplus import Resource, Api, fields, reqparse
 INDEX = 'my_users'
 es = Elasticsearch()
 app = Flask(__name__)
-#app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:vbifyz@localhost:5432/mcnavy"
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://wsamfevycardfy:1369c086e4d96c5a35adfcec86cebba1b6013c22ac322a81b920aedec4b82e8f@ec2-3-229-51-131.compute-1.amazonaws.com:5432/d632rs7uam1sbl"
+# app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:vbifyz@localhost:5432/mcnavy"
+app.config[
+    'SQLALCHEMY_DATABASE_URI'] = "postgres://wsamfevycardfy:1369c086e4d96c5a35adfcec86cebba1b6013c22ac322a81b920aedec4b82e8f@ec2-3-229-51-131.compute-1.amazonaws.com:5432/d632rs7uam1sbl"
 
 api = Api(app)
 
@@ -251,4 +254,6 @@ class UpdateEvents(Resource):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Bind to PORT if defined, otherwise default to 5000.
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
