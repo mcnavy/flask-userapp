@@ -6,9 +6,7 @@ class EventModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String())
     description = db.Column(db.String())
-    assigned_users = db.Column(db.String())
 
-    def __init__(self, name, description, assigned_users):
+    def __init__(self, name, description):
         self.name = name
         self.description = description
-        self.assigned_users = assigned_users

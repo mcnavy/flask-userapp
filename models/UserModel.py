@@ -7,10 +7,8 @@ class UserModel(db.Model):
     name = db.Column(db.String())
     surname = db.Column(db.String())
     bio = db.Column(db.String())
-    assigned_events = db.Column(db.String())
 
-    def __init__(self, name, surname, bio, assigned_events):
+    def __init__(self, name, surname, bio):
         self.name = name
         self.surname = surname
         self.bio = bio
-        self.assigned_events = assigned_events
