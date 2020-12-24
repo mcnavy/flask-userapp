@@ -4,9 +4,7 @@ from flask_restplus import reqparse, Resource, Namespace
 from config import es, INDEX
 
 parser = reqparse.RequestParser()
-parser.add_argument('name', required=False)
-parser.add_argument('surname', required=False)
-parser.add_argument('bio', required=False)
+parser.add_argument('query', required=False)
 
 api = Namespace('elastic', description='ElasticSearch')
 
@@ -15,23 +13,22 @@ api = Namespace('elastic', description='ElasticSearch')
 class SmartGet(Resource):
     @api.expect(parser)
     def get(self):
-        match = 0
-        name, surname, bio = '', '', ''
+
+        query = ''
         args = request.args
-        if 'name' in args.keys():
-            match += 1
-            name = args['name']
-        if 'surname' in args.keys():
-            match += 1
-            surname = args['surname']
-        if 'bio' in args.keys():
-            match += 1
-            bio = args['bio']
+        if 'query' in args.keys():
+            query = args['query']
+        else:
+            return {'Error': 'Make sure you passed parameters'}
+        if len(query.split()) > 3:
+            match = 3
+        else:
+            match = len(query.split())
         res = es.search(index=INDEX, body={"query": {"bool": {"should": [
             {
                 "match": {
                     "name": {
-                        'query': name,
+                        'query': query,
                         'fuzziness': 1
 
                     }
@@ -41,7 +38,7 @@ class SmartGet(Resource):
             {
                 "match": {
                     "bio": {
-                        'query': bio,
+                        'query': query,
 
                     }
 
@@ -50,7 +47,7 @@ class SmartGet(Resource):
             {
                 "match": {
                     "surname": {
-                        'query': surname,
+                        'query': query,
                         'fuzziness': 1,
 
                     }
