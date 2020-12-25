@@ -18,3 +18,4 @@ USER_DATA = api.model('User', {'name': fields.String('test'), 'surname': fields.
 EVENT_DATA = api.model('Event', {'name': fields.String('example_event'), 'description': fields.String('description')})
 
 SEARCHABLE_ELASTIC_FIELDS = ['name', 'surname', 'bio']
+ELASTIC_COEF = 1.4

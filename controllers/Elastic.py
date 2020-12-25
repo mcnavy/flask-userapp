@@ -1,7 +1,7 @@
 from flask import request
 from flask_restplus import reqparse, Resource, Namespace
 
-from config import es, INDEX, SEARCHABLE_ELASTIC_FIELDS
+from config import es, INDEX, SEARCHABLE_ELASTIC_FIELDS,ELASTIC_COEF
 
 parser = reqparse.RequestParser()
 parser.add_argument('query', required=False)
@@ -39,6 +39,7 @@ class SmartGet(Resource):
             'surname': hit['_source']['surname'],
             'bio': hit['_source']['bio']
 
-        } for hit in res['hits']['hits'] if 1.4 * hit['_score'] >= res['hits']['max_score']]
-
+        } for hit in res['hits']['hits'] if ELASTIC_COEF * hit['_score'] >= res['hits']['max_score']]
+        for hit in res['hits']['hits']:
+            print(hit['_score'], res['hits']['max_score'])
         return {"Users": results}
