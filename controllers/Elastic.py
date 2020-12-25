@@ -1,7 +1,7 @@
 from flask import request
 from flask_restplus import reqparse, Resource, Namespace
 
-from config import es, INDEX
+from config import es, INDEX, SEARCHABLE_ELASTIC_FIELDS
 
 parser = reqparse.RequestParser()
 parser.add_argument('query', required=False)
@@ -20,42 +20,20 @@ class SmartGet(Resource):
             query = args['query']
         else:
             return {'Error': 'Make sure you passed parameters'}
-        if len(query.split()) > 3:
-            match = 3
-        else:
-            match = len(query.split())
-        res = es.search(index=INDEX, body={"query": {"bool": {"should": [
-            {
-                "match": {
-                    "name": {
-                        'query': query,
-                        'fuzziness': 1
+        match = min(len(query.split()), len(SEARCHABLE_ELASTIC_FIELDS))
 
-                    }
-
-                }
-            },
-            {
-                "match": {
-                    "bio": {
-                        'query': query,
-
-                    }
-
-                }
-            },
-            {
-                "match": {
-                    "surname": {
-                        'query': query,
-                        'fuzziness': 1,
-
-                    }
+        es_param = [{
+            "match": {
+                field: {
+                    "query": query,
+                    "fuzziness": 1
                 }
             }
-        ],
-            "minimum_should_match": match
-        }}})
+        } for field in SEARCHABLE_ELASTIC_FIELDS]
+
+        res = es.search(index=INDEX, body={"query": {"bool": {"should": es_param,
+                                                              "minimum_should_match": match
+                                                              }}})
         results = [{
             'name': hit['_source']['name'],
             'surname': hit['_source']['surname'],

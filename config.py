@@ -16,3 +16,5 @@ migrate = Migrate(app, db)
 USER_DATA = api.model('User', {'name': fields.String('test'), 'surname': fields.String('test_surname'),
                                'bio': fields.String('this user has been born...')})
 EVENT_DATA = api.model('Event', {'name': fields.String('example_event'), 'description': fields.String('description')})
+
+SEARCHABLE_ELASTIC_FIELDS = ['name', 'surname', 'bio']
