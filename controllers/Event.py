@@ -55,7 +55,7 @@ class UpdateEvents(Resource):
 
                 return f'User {event.id} has been updated'
             else:
-                return 'Error, make sure you passed JSON'
+                return {'code': 400, 'message': 'Error, make sure you passed JSON'}
 
     def delete(self, event_id):
         event = EventModel.query.get_or_404(event_id)

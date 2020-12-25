@@ -19,7 +19,7 @@ class SmartGet(Resource):
         if 'query' in args.keys():
             query = args['query']
         else:
-            return {'Error': 'Make sure you passed parameters'}
+            return {'code': 400, 'message': 'Error, make sure you passed query'}
         match = min(len(query.split()), len(SEARCHABLE_ELASTIC_FIELDS))
 
         es_param = [{

@@ -35,7 +35,7 @@ class Users(Resource):
             es.index(index=INDEX, id=new_user.id, body=data)
             return f'User {new_user.name} has been created'
         else:
-            return 'Error, make sure you passed JSON'
+            return {'code': 400, 'message': 'Error, make sure you passed JSON'}
 
 
 @api.route('/<user_id>', methods=['PUT', 'DELETE'])
@@ -58,7 +58,7 @@ class UpdateUsers(Resource):
             es.update(index=INDEX, id=user.id, body={"doc": data})
             return f'User {user.id} has been updated'
         else:
-            return 'Error, make sure you passed JSON'
+            return {'code': 400, 'message': 'Error, make sure you passed JSON'}
 
     def delete(self, user_id):
         user = UserModel.query.get_or_404(user_id)
