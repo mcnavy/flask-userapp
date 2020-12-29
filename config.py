@@ -5,9 +5,9 @@ from flask_restplus import Api, fields
 from flask_sqlalchemy import SQLAlchemy
 
 INDEX = 'my_users'
-es = Elasticsearch()
+es = Elasticsearch({"host": "elasticsearch", "port": 9200})
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://USER:PASSWORD@localhost:5432/DB_NAME"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://db_user:123@postgres:5432/db"
 
 api = Api(app)
 
